@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import cmdopt,threading
+#设置选项参数
+short=['-i','-u','-p','-c']
+ltype=['list,file','str','str','list,file']
+long=['--ip','--uname','--passwd','--cmd']
+help=['host_ipaddr','user_name','user_passwd','commands']
+thread_num=conf.thread_num
+
+#增加多线程
+def cmdrun():
+    try:
+        parser=cmdopt.cmdopt(short=short,lopt=long,otype=ltype,show=help)
+        parser.run(target=pyssh.pyssh)
+    except Exception,e:
+        return e
+
+with threading.Semaphore(thread_num):
+    t=threading.Thread(target=cmdrun)
+    t.start()
